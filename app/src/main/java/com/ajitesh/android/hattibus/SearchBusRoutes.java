@@ -98,6 +98,10 @@ public class SearchBusRoutes extends Activity {
             return true;
         }
 
+        if (id == R.id.action_update) {
+            Toast.makeText(this, "Data Updated Successfully!", Toast.LENGTH_LONG).show();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

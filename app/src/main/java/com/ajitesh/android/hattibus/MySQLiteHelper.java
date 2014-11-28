@@ -170,4 +170,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         return  cursor;
     }
 
+    public  Cursor getBusTimings(String routeid) {
+        openDataBase();
+        String query = "SELECT ROUTEID,DEPARTURETIME,ARRIVALTIME,ACTIVE FROM BUSTIMINGS WHERE ROUTEID = '" + routeid + "'";
+        Cursor cursor = this.myDataBase.rawQuery(query, null);
+        Log.i("getBusTimings:", "Count=" + cursor.getCount());
+        close(); //CLOSE THE DB
+        return  cursor;
+    }
 }

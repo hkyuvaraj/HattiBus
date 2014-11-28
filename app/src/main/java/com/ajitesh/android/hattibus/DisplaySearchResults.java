@@ -133,6 +133,13 @@ public class DisplaySearchResults  extends Activity {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(getApplicationContext(), "Show Bus Timing for " + btn.getHint(), Toast.LENGTH_LONG).show();
+                    String user_selected_route_id =  btn.getHint().toString();
+                    Intent intent = new Intent(DisplaySearchResults.this,DisplayBusTimings.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("user_selected_route_id",user_selected_route_id);
+                    intent.putExtras(bundle);
+                    //progressDialog.dismiss();
+                    startActivity(intent);
                 }
             });
 
