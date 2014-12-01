@@ -266,4 +266,78 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         Log.i("updateUpdateInfoTable:", "Table Updated Successfully!!");
     }
 
+    public void updateBusRoutesTable(String JSONDataFromWS) throws Exception {
+        openDataBaseInWriteMode();
+        deleteAll("BUSROUTES");
+        JSONArray ja = new JSONArray(JSONDataFromWS);
+        JSONObject jo = null;
+
+        ArrayList<String> list1 = new ArrayList<String>();
+        ArrayList<String> list2 = new ArrayList<String>();
+        ArrayList<String> list3 = new ArrayList<String>();
+        ArrayList<String> list4 = new ArrayList<String>();
+
+        for(int i=0; i<ja.length(); i++) {
+
+            jo = ja.getJSONObject(i);
+            list1.add(jo.getString("routeId"));
+            list2.add(jo.getString("origin"));
+            list3.add(jo.getString("destination"));
+            list4.add(jo.getString("route"));
+
+        }
+
+        for(int i=0; i<list1.size(); i++) {
+
+            ContentValues initialValues = new ContentValues();
+            initialValues.put("_ROUTEID", list1.get(i).toString());
+            initialValues.put("ORIGIN", list2.get(i).toString());
+            initialValues.put("DESTINATION", list3.get(i).toString());
+            initialValues.put("ROUTE", list4.get(i).toString());
+
+            myDataBase.insert("BUSROUTES", null, initialValues);
+
+        }
+
+        close();
+        Log.i("updateBusRoutesTable:", "Table Updated Successfully!!");
+    }
+
+    public void updateBusTimingsTable(String JSONDataFromWS) throws Exception {
+        openDataBaseInWriteMode();
+        deleteAll("BUSTIMINGS");
+        JSONArray ja = new JSONArray(JSONDataFromWS);
+        JSONObject jo = null;
+
+        ArrayList<String> list1 = new ArrayList<String>();
+        ArrayList<String> list2 = new ArrayList<String>();
+        ArrayList<String> list3 = new ArrayList<String>();
+        ArrayList<String> list4 = new ArrayList<String>();
+
+        for(int i=0; i<ja.length(); i++) {
+
+            jo = ja.getJSONObject(i);
+            list1.add(jo.getString("routeId"));
+            list2.add(jo.getString("departureTime"));
+            list3.add(jo.getString("arrivalTime"));
+            list4.add(jo.getString("active"));
+
+        }
+
+        for(int i=0; i<list1.size(); i++) {
+
+            ContentValues initialValues = new ContentValues();
+            initialValues.put("ROUTEID", list1.get(i).toString());
+            initialValues.put("DEPARTURETIME", list2.get(i).toString());
+            initialValues.put("ARRIVALTIME", list3.get(i).toString());
+            initialValues.put("ACTIVE", list4.get(i).toString());
+
+            myDataBase.insert("BUSTIMINGS", null, initialValues);
+
+        }
+
+        close();
+        Log.i("updateBusTimingsTable:", "Table Updated Successfully!!");
+    }
+
 }
