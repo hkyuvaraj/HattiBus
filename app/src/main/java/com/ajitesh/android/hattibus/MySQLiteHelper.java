@@ -1,5 +1,6 @@
 package com.ajitesh.android.hattibus;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
@@ -13,6 +14,9 @@ import android.database.*;
 import android.database.sqlite.*;
 import android.webkit.WebStorage;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.*;
 
@@ -118,6 +122,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
 
+    public void openDataBaseInWriteMode() throws SQLException{
+        //Open the database
+        String myPath = DB_PATH + DB_NAME;
+        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+    }
+
     @Override
     public synchronized void close() {
         if(myDataBase != null)
@@ -178,4 +188,82 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         close(); //CLOSE THE DB
         return  cursor;
     }
+
+    /*
+    //---insert data into SQLite DB---
+    public long insert(String tablename, String id, String name) {
+
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_ID, id);
+        initialValues.put(KEY_NAME, name);
+
+        return myDataBase.insert(tablename, null, initialValues);
+    }
+    */
+
+
+    //---Delete All Data from table in SQLite DB---
+    public void deleteAll(String tablename) {
+
+        myDataBase.delete(tablename, null, null);
+    }
+
+    public void updateBusStopsTable(String JSONDataFromWS) throws Exception {
+        openDataBaseInWriteMode();
+        deleteAll("BUSSTOPS");
+        JSONArray ja = new JSONArray(JSONDataFromWS);
+        JSONObject jo = null;
+
+        ArrayList<String> list1 = new ArrayList<String>();
+        ArrayList<String> list2 = new ArrayList<String>();
+
+        for(int i=0; i<ja.length(); i++) {
+
+            jo = ja.getJSONObject(i);
+            list1.add(jo.getString("busStopID"));
+            list2.add(jo.getString("busStopName"));
+        }
+
+        for(int i=0; i<list1.size(); i++) {
+
+            ContentValues initialValues = new ContentValues();
+            initialValues.put("_BUSSTOPID", list1.get(i).toString());
+            initialValues.put("BUSSTOPNAME", list2.get(i).toString());
+            myDataBase.insert("BUSSTOPS", null, initialValues);
+
+        }
+
+        close();
+        Log.i("updateBusStopsTable:", "Table Updated Successfully!!");
+    }
+
+    public void updateUpdateInfoTable(String JSONDataFromWS) throws Exception {
+        openDataBaseInWriteMode();
+        deleteAll("UPDATE_INFO");
+        JSONArray ja = new JSONArray(JSONDataFromWS);
+        JSONObject jo = null;
+
+        ArrayList<String> list1 = new ArrayList<String>();
+        ArrayList<String> list2 = new ArrayList<String>();
+
+        for(int i=0; i<ja.length(); i++) {
+
+            jo = ja.getJSONObject(i);
+            list1.add(jo.getString("version"));
+            list2.add(jo.getString("lastUpdateDate"));
+        }
+
+        for(int i=0; i<list1.size(); i++) {
+
+            ContentValues initialValues = new ContentValues();
+            initialValues.put("VERSION", list1.get(i).toString());
+            initialValues.put("LASTUPDATEDATE", list2.get(i).toString());
+            myDataBase.insert("UPDATE_INFO", null, initialValues);
+
+        }
+
+        close();
+        Log.i("updateUpdateInfoTable:", "Table Updated Successfully!!");
+    }
+
 }

@@ -99,6 +99,10 @@ public class SearchBusRoutes extends Activity {
         }
 
         if (id == R.id.action_update) {
+            UpdateSQLiteFromWebservice updateFromWS = new UpdateSQLiteFromWebservice(getApplicationContext());
+            updateFromWS.execute("dummy");
+            //Log.i("Data From update info WS:",updateFromWS.execute("dummy"));
+
             Toast.makeText(this, "Data Updated Successfully!", Toast.LENGTH_LONG).show();
             return true;
         }
