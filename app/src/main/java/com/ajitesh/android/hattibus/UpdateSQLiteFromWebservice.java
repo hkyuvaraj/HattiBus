@@ -58,6 +58,8 @@ public class UpdateSQLiteFromWebservice extends  AsyncTask<String, String, Strin
             MySQLiteHelper mySQLiteHelper = new MySQLiteHelper(context);
             mySQLiteHelper.updateUpdateInfoTable(updateInfo);
             mySQLiteHelper.updateBusStopsTable(busstopsInfo);
+            mySQLiteHelper.updateBusRoutesTable(busrutesInfo);
+            mySQLiteHelper.updateBusTimingsTable(bustimingsInfo);
         }
         catch (Exception e){
 
