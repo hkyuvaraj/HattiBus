@@ -1,18 +1,12 @@
 package com.ajitesh.android.hattibus;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -56,21 +50,25 @@ public class SearchBusRoutes extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                ProgressDialogPopup.progressDialogSearch = ProgressDialog.show(SearchBusRoutes.this,null,"Searching please wait...");
-
                 String user_selected_origin_value = origin.getText().toString();
                 String user_selected_destination_value = destination.getText().toString();
 
-                Intent intent = new Intent(SearchBusRoutes.this,DisplaySearchResults.class);
-                //Intent intent = new Intent("display_search_result_filter");
-                Bundle bundle = new Bundle();
-                bundle.putString("user_selected_origin_key",user_selected_origin_value);
-                bundle.putString("user_selected_destination_key",user_selected_destination_value);
-                intent.putExtras(bundle);
-                //progressDialog.dismiss();
-                startActivity(intent);
+                if(user_selected_origin_value.trim().isEmpty() || user_selected_destination_value.trim().isEmpty()) {
+                    AlertDialogPopUp alertDialogPopUp = new AlertDialogPopUp(SearchBusRoutes.this);
+                    alertDialogPopUp.showEnterFromToAlert();
+                }else {
 
+                    ProgressDialogPopup.progressDialogSearch = ProgressDialog.show(SearchBusRoutes.this, null, "Searching please wait...");
+
+                    Intent intent = new Intent(SearchBusRoutes.this, DisplaySearchResults.class);
+                    //Intent intent = new Intent("display_search_result_filter");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("user_selected_origin_key", user_selected_origin_value);
+                    bundle.putString("user_selected_destination_key", user_selected_destination_value);
+                    intent.putExtras(bundle);
+                    //progressDialog.dismiss();
+                    startActivity(intent);
+                }
 
             }
         });
